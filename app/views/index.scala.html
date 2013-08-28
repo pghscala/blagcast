@@ -2,6 +2,8 @@
 
 @standardHeader(title = "BLAGCAST") {
 
+
+
 <section id="list">
 @for(episode <- episodes) {
 
@@ -9,19 +11,11 @@
          <h1>@episode.title</h1>
          <time>@episode.friendlyTimeString</time>
          <!--  TODO - All this rendering should be in javascript, creating a widget. -->
-         @for(url <- episode.audio) {
-           <div class="player">
-             <a class="download" href="@url"></a>
-             <a class="popup" data-bind="click: toggleVideo"></a>
-             <a class="play" data-bind="click: play, css: pausedCss"></a>
-             <span class="progress" data-bind="template: { name: 'progress-bar', afterRender: setupPlayer }, click: skipTo">
-             </span>
-           </div>
+         @for(link <- episode.audio) {
+           <div class="player" data-href="@link"></div>
          }
-         @for(url <- episode.video) {
-           <div class="video">
-              <iframe title="@episode.title" src="@url" width="480" height="300" frameborder="0"></iframe>
-           </div>
+         @for(link <- episode.video) {
+           <div class="video" data-href="@link"></div>
          }
          <section>
              <h2>Episode treasures</h2>
@@ -33,5 +27,11 @@
        </article>
 }
 </section>
+
+
+<!-- Because we're stupidly using javascript to render stuff, we freak out here. -->
+<script src="jquery.min.js"></script>
+<script src="knockout-2.2.1.js"></script>
+<script src="podcastWidget.js"></script>
 
 }
