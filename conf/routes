@@ -2,3 +2,6 @@
 
 GET	/  controllers.HomeController.index
 GET /rss controllers.HomeController.audioRss
+
+
+GET /*file	controllers.Assets.at(path="/public", file)

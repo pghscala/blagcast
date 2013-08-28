@@ -10,8 +10,13 @@ case class Episode(
     desc: String, 
     timestamp: java.util.Date,
     attachments: Seq[MediaAttachment]) {
-  def hasAudio: Boolean = attachments exists (_.isInstanceOf[Audio])
-  def hasVideo: Boolean = attachments exists (_.isInstanceOf[Video])
+  // TODO - This belongs on the view side...
+  def friendlyTimeString = {
+    val df = new java.text.SimpleDateFormat("MMM dd")
+    df.format(timestamp)
+  }
+  def audio: Option[String] = attachments find (_.isInstanceOf[Audio]) map (_.location)
+  def video: Option[String] = attachments find (_.isInstanceOf[Video]) map (_.location)
 }
 
 
