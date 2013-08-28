@@ -5,12 +5,9 @@ import play.api.libs.ws.{WS, Response}
 import concurrent.Future
 import concurrent.ExecutionContext.Implicits.global
 import play.api.libs.json.JsValue
+import Global._
 
 object HomeController extends Controller {
-  
-  val youtubeUser = "UCHxNwi3l5CGZo1kG47k7i2Q"
-  val audioFeed = "http://thescalawags.libsyn.com/rss"
-  
   
   def index = Action(Async {
     for {
