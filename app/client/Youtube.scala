@@ -6,7 +6,25 @@ import play.api.libs.json._
 
 
 /** A video we've parsed from youtube. */
-case class YoutubeVideo(id: String, title: String, timestamp: String, thumbnail: String, content: String)
+case class YoutubeVideo(
+    id: String, 
+    title: String, 
+    timestamp: String, 
+    thumbnail: String, 
+    content: String)
+object YoutubeVideo {
+  import play.api.libs.json._
+  import play.api.libs.functional.syntax._
+
+  implicit val format = (
+    (__ \ "id").format[String] and
+    (__ \ "title").format[String] and
+    (__ \ "timestamp").format[String] and
+    (__ \ "thumbnail").format[String] and
+    (__ \ "content").format[String]
+  )(YoutubeVideo.apply, unlift(YoutubeVideo.unapply))  
+}
+
 
 object Youtube {
   

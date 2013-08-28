@@ -12,11 +12,12 @@ object HomeController extends Controller {
   def index = Action(Async {
     for {
       casts <- fakeDataModelCall
-    } yield Ok(views.html.index(casts))
+    } yield Ok(views.html.podcastList("Scalawags", casts))
   })
   
   
-  // Hacky method for testing...
+  // Hacky method for testing...  In the future we'll just store
+  // our podcasts inside 
   def fakeDataModelCall: Future[Seq[model.Episode]] = {
     val videos = client.Youtube.grabUserFeed(youtubeUser)
     val audios = client.Libsyn.readFeed(audioFeed)
@@ -40,6 +41,11 @@ object HomeController extends Controller {
     } yield as zip vs map join
     
   }
+  
+  // TODO - Authenticate.
+  def admin = Action(
+     Ok(views.html.admin())
+  )
   
   
   // TODO - Cache the audio rss?

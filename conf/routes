@@ -1,7 +1,14 @@
 
-
+# Public URLS
 GET	/  controllers.HomeController.index
 GET /rss controllers.HomeController.audioRss
 
+GET	/admin  controllers.HomeController.admin
 
+# REST API - for admin interface
+GET /api/feeds/audio  controllers.RestController.audios
+GET /api/feeds/video  controllers.RestController.videos
+
+
+# Assets
 GET /*file	controllers.Assets.at(path="/public", file)

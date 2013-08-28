@@ -12,7 +12,26 @@ import scala.xml.Elem
  * @param id  The id associated with the RSS entry.
  * @param content a Url to the audio
  */
-case class LibsynAudio(id: String, title: String, link: String, desc: String, timestamp: String, content: String)
+case class LibsynAudio(
+    id: String, 
+    title: String, 
+    link: String, 
+    desc: String, 
+    timestamp: String, 
+    content: String)
+object LibsynAudio {
+  import play.api.libs.json._
+  import play.api.libs.functional.syntax._
+
+  implicit val format = (
+    (__ \ "id").format[String] and
+    (__ \ "title").format[String] and
+    (__ \ "link").format[String] and
+    (__ \ "desc").format[String] and
+    (__ \ "timestamp").format[String] and
+    (__ \ "content").format[String]
+  )(LibsynAudio.apply, unlift(LibsynAudio.unapply))  
+}
 
 object Libsyn {
   
