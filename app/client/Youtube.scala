@@ -5,8 +5,10 @@ import play.api.libs.ws.WS
 import play.api.libs.json._
 
 
+/** A video we've parsed from youtube. */
+case class YoutubeVideo(id: String, title: String, timestamp: String, thumbnail: String, content: String)
+
 object Youtube {
-  
   
   def grabUserFeedJson(user: String)(implicit ctx: ExecutionContext): Future[JsValue] = {
     val url = s"https://gdata.youtube.com/feeds/api/users/${user}/uploads?alt=json"
@@ -49,6 +51,3 @@ object Youtube {
     println(Await.result(result, 2.minutes))
   }
 }
-
-/** A video we've parsed from youtube. */
-case class YoutubeVideo(id: String, title: String, timestamp: String, thumbnail: String, content: String)

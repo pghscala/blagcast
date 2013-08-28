@@ -1,0 +1,22 @@
+@(episodes: Seq[model.Episode])
+
+<html>
+<head>
+<title>BLAGCAST</title>
+</head>
+<body>
+
+<h1>Episodes</h1>
+<ul>
+@for(episode <- episodes) {
+  <li>
+    <h2>@episode.title</h2>
+    <p>@Html(episode.desc)</p>
+    @for(a <- episode.attachments) {
+      <a href="@a.location">@a.location</a>
+    }
+  </li>
+}
+</ul>
+</body>
+</html>

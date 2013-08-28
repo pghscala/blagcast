@@ -8,12 +8,46 @@ import play.api.libs.json.JsValue
 
 object HomeController extends Controller {
   
+  val youtubeUser = "UCHxNwi3l5CGZo1kG47k7i2Q"
+  val audioFeed = "http://thescalawags.libsyn.com/rss"
+  
+  
   def index = Action(Async {
-    
-    val videos = client.Youtube.grabUserFeed("UCHxNwi3l5CGZo1kG47k7i2Q")
-      
-    videos map { vs =>
-      Ok(vs mkString "  ")
+    for {
+      casts <- fakeDataModelCall
+    } yield Ok(views.html.index(casts))
+  })
+  
+  
+  // Hacky method for testing...
+  def fakeDataModelCall: Future[Seq[model.Episode]] = {
+    val videos = client.Youtube.grabUserFeed(youtubeUser)
+    val audios = client.Libsyn.readFeed(audioFeed)
+    def join(pair: (client.LibsynAudio, client.YoutubeVideo)): model.Episode = {
+      val (audio, video) = pair
+      model.Episode(
+        id = audio.id,
+        title = audio.title,
+        desc = audio.desc,
+        timestamp = new java.util.Date(audio.timestamp),
+        attachments =
+          Seq(
+            model.Audio(audio.link),
+            model.Video(video.content)
+          )
+      )
     }
+    for {
+      as <- audios
+      vs <- videos
+    } yield as zip vs map join
+    
+  }
+  
+  
+  // TODO - Cache the audio rss?
+  def audioRss = Action(Async {
+    val result = WS.url(audioFeed).get
+    result map (x => Ok(x.xml))
   })
 }
