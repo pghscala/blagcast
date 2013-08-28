@@ -9,29 +9,24 @@ case class Episode(
     title: String, 
     desc: String, 
     timestamp: java.util.Date,
-    attachments: Seq[MediaAttachment]) {
+    audio: Option[String],
+    video: Option[String]
+) {
   // TODO - This belongs on the view side...
   def friendlyTimeString = {
     val df = new java.text.SimpleDateFormat("MMM dd")
     df.format(timestamp)
   }
-  def audio: Option[String] = attachments find (_.isInstanceOf[Audio]) map (_.location)
-  def video: Option[String] = attachments find (_.isInstanceOf[Video]) map (_.location)
 }
-
-
-/** Represents a media attachment to an episode. */
-sealed trait MediaAttachment {
-  def location: String
+object Episode {
+  import play.api.libs.json._
+  import play.api.libs.functional.syntax._
+  implicit val format = (
+    (__ \ "id").format[String] and
+    (__ \ "title").format[String] and
+    (__ \ "desc").format[String] and
+    (__ \ "timestamp").format[java.util.Date] and
+    (__ \ "audio").format[Option[String]] and
+    (__ \ "video").format[Option[String]]
+  )(Episode.apply, unlift(Episode.unapply))  
 }
-
-/** 
- *  Represents an audio attachment to an episode.
- *  TODO - More info on what can be stored.
- */
-case class Audio(location: String) extends MediaAttachment
-
-/** Represents a video attachment to an episode.
- *  
- */
-case class Video(location: String) extends MediaAttachment

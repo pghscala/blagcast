@@ -28,11 +28,8 @@ object HomeController extends Controller {
         title = audio.title,
         desc = audio.desc,
         timestamp = new java.util.Date(audio.timestamp),
-        attachments =
-          Seq(
-            model.Audio(audio.link),
-            model.Video(video.content)
-          )
+        audio = Some(audio.link),
+        video = Some(video.content)
       )
     }
     for {
